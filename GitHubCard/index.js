@@ -2,7 +2,9 @@
            (replacing the palceholder with your Github name):
            https://api.github.com/users/<your name>
 */
-axios.get('https://api.github.com/users/jmadflo')
+
+const makeUserCard = userLogin => {
+  axios.get(`https://api.github.com/users/${userLogin}`)
   .then(response => {
     console.log(response)
     document.querySelector('.cards').appendChild(createCard(response.data))
@@ -10,6 +12,8 @@ axios.get('https://api.github.com/users/jmadflo')
   .catch(error => {
     console.log("There was an error when attempting to return the data ", error)
   })
+}
+
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
@@ -32,13 +36,26 @@ axios.get('https://api.github.com/users/jmadflo')
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+let followersArray = [];
 
 axios.get('https://api.github.com/users/jmadflo/followers')
   .then(response => {
     console.log(response)
-    
+    followersArray = Object.values(response.data).map( user => {
+      return user.login
+    })
+    followersArray.unshift('jmadflo')
+    console.log(followersArray)
+    followersArray.forEach( user => {
+      makeUserCard(user)
+    })
   })
+  .catch(error => {
+    console.log('could not get followers info', error)
+  })
+
+
+
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
