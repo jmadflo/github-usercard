@@ -95,19 +95,20 @@ const createCard = (dataObject) => {
   name.classList.add('name')
   username.classList.add('username')
 
-  card.append(avatarImg, cardInfo)
-  cardInfo.append(name, username, location, profile, followers, following, bio)
-
   avatarImg.src = dataObject.avatar_url
   name.textContent = dataObject.name
   username.textContent = dataObject.login
   location.textContent = `Location: ${dataObject.location}`
   ghAddress.href = `https://github.com/${dataObject.login}`
   ghAddress.textContent = `https://github.com/${dataObject.login}`
-  profile.textContent = `Profile: ${ghAddress}`
+  profile.textContent = "Profile: "
   followers.textContent = `Followers: ${dataObject.followers}`
   following.textContent = `Following: ${dataObject.following}`
   bio.textContent = `Bio: ${dataObject.bio}`
+
+  card.append(avatarImg, cardInfo)
+  cardInfo.append(name, username, location, profile, followers, following, bio)
+  profile.append(ghAddress)
 
   return card
 }
