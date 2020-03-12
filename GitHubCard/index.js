@@ -3,6 +3,18 @@
            https://api.github.com/users/<your name>
 */
 
+const makeUserCard = userLogin => {
+  axios.get(`https://api.github.com/users/${userLogin}`)
+  .then(response => {
+    console.log(response)
+    document.querySelector('.cards').appendChild(createCard(response.data))
+  })
+  .catch(error => {
+    console.log("There was an error when attempting to return the data ", error)
+  })
+}
+
+
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
    data in order to use it to build your component function 
@@ -24,7 +36,26 @@
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+let followersArray = [];
+
+axios.get('https://api.github.com/users/jmadflo/followers')
+  .then(response => {
+    console.log(response)
+    followersArray = Object.values(response.data).map( user => {
+      return user.login
+    })
+    followersArray.unshift('jmadflo')
+    console.log(followersArray)
+    followersArray.forEach( user => {
+      makeUserCard(user)
+    })
+  })
+  .catch(error => {
+    console.log('could not get followers info', error)
+  })
+
+
+
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
@@ -45,6 +76,42 @@ const followersArray = [];
 </div>
 
 */
+
+const createCard = (dataObject) => {
+  const card = document.createElement('div')
+  const avatarImg = document.createElement('img')
+  const cardInfo = document.createElement('div')
+  const name = document.createElement('h3')
+  const username = document.createElement('p')
+  const location = document.createElement('p')
+  const profile = document.createElement('p')
+  const ghAddress = document.createElement('a')
+  const followers = document.createElement('p')
+  const following = document.createElement('p')
+  const bio = document.createElement('p')
+
+  card.classList.add('card')
+  cardInfo.classList.add('card-info')
+  name.classList.add('name')
+  username.classList.add('username')
+
+  avatarImg.src = dataObject.avatar_url
+  name.textContent = dataObject.name
+  username.textContent = dataObject.login
+  location.textContent = `Location: ${dataObject.location}`
+  ghAddress.href = `https://github.com/${dataObject.login}`
+  ghAddress.textContent = `https://github.com/${dataObject.login}`
+  profile.textContent = "Profile: "
+  followers.textContent = `Followers: ${dataObject.followers}`
+  following.textContent = `Following: ${dataObject.following}`
+  bio.textContent = `Bio: ${dataObject.bio}`
+
+  card.append(avatarImg, cardInfo)
+  cardInfo.append(name, username, location, profile, followers, following, bio)
+  profile.append(ghAddress)
+
+  return card
+}
 
 /* List of LS Instructors Github username's: 
   tetondan
