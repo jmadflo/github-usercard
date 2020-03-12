@@ -97,15 +97,14 @@ const createCard = (dataObject) => {
 
   card.append(avatarImg, cardInfo)
   cardInfo.append(name, username, location, profile, followers, following, bio)
-  profile.append(ghAddress)
 
   avatarImg.src = dataObject.avatar_url
   name.textContent = dataObject.name
   username.textContent = dataObject.login
   location.textContent = `Location: ${dataObject.location}`
+  ghAddress.href = `https://github.com/${dataObject.login}`
+  ghAddress.textContent = `https://github.com/${dataObject.login}`
   profile.textContent = `Profile: ${ghAddress}`
-  ghAddress.href = "https://github.com/jmadflo"
-  ghAddress.textContent = "https://github.com/jmadflo"
   followers.textContent = `Followers: ${dataObject.followers}`
   following.textContent = `Following: ${dataObject.following}`
   bio.textContent = `Bio: ${dataObject.bio}`
